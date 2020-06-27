@@ -23,13 +23,27 @@ server.post("/api/submit", (res, req) => {
       insurance: req.body.insurance,
       overnight: req.body.overnight,
       weigth: req.body.weight,
-      dimensions: dimension,
+      dimensions: dimensions,
     },
     (err, doc) => {
       if (err) return err;
-      res.send(doc);
+      res.send(doc.id);
     }
   );
+});
+
+server.get("/api/track", (req, res) => {
+  let trackingNumber = req.query.tracking;
+
+  let trackingStatus = new Package();
+
+  trackingStatus.findOne({ trackingId: id }, (data, err) => {
+    if (err) return err;
+    res.json({
+      location: data.location,
+      status: data.status,
+    });
+  });
 });
 
 server.listen(process.env.PORT || 3001, () =>
